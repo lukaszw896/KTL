@@ -32,8 +32,9 @@ namespace KTL_game.Pages
         private int NumberOfRows { get; set; }
         private List<Color> ColorsList {get; set;}
         private TreeStructure GameTree { get; set; }
+        private int Level { get; set; }
         private bool IsFirstMove { get; set; }
-        public GameplayPage(MainWindow window, StartPage startPage, int gameLenght, int seriesLength, int colorsCount, int colorListCount)
+        public GameplayPage(MainWindow window, StartPage startPage, int gameLenght, int seriesLength, int colorsCount, int colorListCount, int level)
         {
             this.Window = window;
             this.StartPage = startPage;
@@ -41,6 +42,7 @@ namespace KTL_game.Pages
             this.SeriesLength = seriesLength;
             this.ColorsCount = colorsCount;
             this.ColorListCount = colorListCount;
+            this.Level = level;
             this.NumberOfFieldsInRow = 15;
             this.ButtonColorIndexList = new List<int>();
             this.GameTree = new TreeStructure(colorListCount, colorsCount,GameLength,SeriesLength,3);
@@ -159,23 +161,36 @@ namespace KTL_game.Pages
             }
             else
             {
-                chooseColorIndex = GameTree.GetMoveColor(tmpColorIndexList, buttonIndex - 1);
-                /*var colorMoveScoreList = new List<int>();
-                foreach (var color in tmpColorIndexList)
+                //2
+                if (this.Level == 2 && FreeSpaces() > 1)
                 {
-                    colorMoveScoreList.Add(GetMoveScore(color, buttonIndex, new List<int>(ButtonColorIndexList)));
+                    chooseColorIndex = GameTree.GetMoveColor(tmpColorIndexList, buttonIndex - 1);
                 }
-
-                int min = 1000000;
-                for (int i = 0; i < colorMoveScoreList.Count; i++)
+                else if (this.Level == 1 || (this.Level == 2 && FreeSpaces() <= 1))
                 {
-                    if (colorMoveScoreList[i] < min)
+                    //1
+                    var colorMoveScoreList = new List<int>();
+                    foreach (var color in tmpColorIndexList)
                     {
-                        min = colorMoveScoreList[i];
-                        chooseColorIndex = i;
+                        colorMoveScoreList.Add(GetMoveScore(color, buttonIndex, new List<int>(ButtonColorIndexList)));
                     }
+
+                    int min = 1000000;
+                    for (int i = 0; i < colorMoveScoreList.Count; i++)
+                    {
+                        if (colorMoveScoreList[i] < min)
+                        {
+                            min = colorMoveScoreList[i];
+                            chooseColorIndex = i;
+                        }
+                    }
+                    chooseColorIndex = tmpColorIndexList[chooseColorIndex];
                 }
-                chooseColorIndex = tmpColorIndexList[chooseColorIndex];*/
+                else
+                {
+                    chooseColorIndex = tmpColorIndexList[rand.Next(tmpColorList.Count - 1)];
+                }
+                //0
             }
             //DO POPRAWY
             //Losuję --- Wybieram kolor z listy kolorów
@@ -213,10 +228,37 @@ namespace KTL_game.Pages
             //}
             if (CheckForGameEnd(chooseColorIndex))
             {
-                MessageBox.Show("End of the game");
+                MessageBox.Show("You win ! End of the game");
+                this.Window.Content = StartPage;
+            }
+            else if(DoILose())
+            {
+                MessageBox.Show("You lost ! End of the game");
+                this.Window.Content = StartPage;
             }
         }
 
+        int FreeSpaces ()
+        {
+            int counter = 0;
+            for (int i = 0; i < ButtonColorIndexList.Count; i++)
+            {
+                if (ButtonColorIndexList[i] == -1)
+                    counter++;
+            }
+            return counter;
+        }
+
+        public bool DoILose()
+        {
+            bool lose = true;
+            for (int i = 0; i < ButtonColorIndexList.Count; i++)
+            {
+                if (ButtonColorIndexList[i] == -1)
+                    lose = false;
+            }
+                return lose;
+        }
         int GetColorListIndex(int colorIndex, List<Color> tmpColorList, int buttonIndex)
         {
             int tmp;

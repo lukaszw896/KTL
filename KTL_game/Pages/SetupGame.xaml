@@ -17,6 +17,7 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
             <RowDefinition Height="0.5*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -32,7 +33,13 @@
         <TextBox Name="ColorCountTextBox" Grid.Row="4" Grid.Column="1" Style="{StaticResource SetupGameTextBoxStyle}" ></TextBox>
         <Label Grid.Row="5" Style="{StaticResource InGameLabelStyle}">Number of colors in list</Label>
         <TextBox Name="ListColorCountTextBox" Grid.Row="5" Grid.Column="1" Style="{StaticResource SetupGameTextBoxStyle}"></TextBox>
-        <Button Name="PrevPageButton" Grid.Row="6" Click="PrevPageButton_Click">Prev</Button>
-        <Button Name="NextPageButton" Grid.Row="6" Grid.Column="1" Click="NextPageButton_Click"> Next</Button>
+        <Label Grid.Row="6" Style="{StaticResource InGameLabelStyle}">Difficulty</Label>
+        <ComboBox Name="levelsCbox" Grid.Column="1" HorizontalAlignment="Stretch" Grid.Row="6" VerticalAlignment="Center" Style="{StaticResource InGameBStyle}">
+            <ComboBoxItem Name="cbl1" Style="{StaticResource InGameBoxStyle}">Random decisions</ComboBoxItem>
+            <ComboBoxItem Name="cbl2" Style="{StaticResource InGameBoxStyle}">Single move prediction</ComboBoxItem>
+            <ComboBoxItem Name="cbl3" Style="{StaticResource InGameBoxStyle}">Three moves prediction</ComboBoxItem>
+        </ComboBox>
+        <Button Name="PrevPageButton" Grid.Row="7" Click="PrevPageButton_Click">Prev</Button>
+        <Button Name="NextPageButton" Grid.Row="7" Grid.Column="1" Click="NextPageButton_Click"> Next</Button>
     </Grid>
 </Page>

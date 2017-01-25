@@ -119,9 +119,11 @@ namespace KTL_game
         private int ColorReturnByBranch()
         {
             var branchScores = new List<int>();
+           
             foreach (var child in Root.Children)
             {
                 int branchScore = 0;
+                
                 CalculateBranchScore(child, ref branchScore);
                 branchScores.Add(branchScore);
             }
@@ -150,6 +152,7 @@ namespace KTL_game
 
         private void CalculateBranchScore(NodeStructure node, ref int branchScore)
         {
+            
             if(node.Children[0].Color == -1)
             {
                 foreach(var child in node.Children)

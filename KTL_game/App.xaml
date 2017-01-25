@@ -24,6 +24,15 @@
                 <Setter Property="Margin" Value="100,0,0,0" />
                 <Setter Property="FontSize" Value="30" />
             </Style>
+            <Style TargetType="ComboBoxItem" x:Key="InGameBoxStyle">
+                <Setter Property="FontSize" Value="30"/>
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+            <Style TargetType="ComboBox" x:Key="InGameBStyle">
+                <Setter Property="FontSize" Value="30" />
+                <Setter Property="Margin" Value="50,15,50,15"/>
+            </Style>
+
             <Style TargetType="Label" x:Key="GameLabelStyle">
                 <Setter Property="Margin" Value="0,0,50,0" />
                 <Setter Property="FontSize" Value="30" />

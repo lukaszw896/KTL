@@ -18,6 +18,6 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="1" Style="{StaticResource ResourceKey=TitleLabelStyle}">Title</Label>
         <Button Name="StartButton" Grid.Row="2" Style="{StaticResource ResourceKey=MenuButtonStyle}" Click="StartButton_Click">Start</Button>
-        <Button Name="SettingsButton" Grid.Row="3" Style="{StaticResource ResourceKey=MenuButtonStyle}" Click="SettingsButton_Click">Settings</Button>
+        <!--<Button Name="SettingsButton" Grid.Row="3" Style="{StaticResource ResourceKey=MenuButtonStyle}" Click="SettingsButton_Click">Settings</Button>-->
     </Grid>
 </Page>
