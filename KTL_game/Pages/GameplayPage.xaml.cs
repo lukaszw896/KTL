@@ -31,6 +31,8 @@ namespace KTL_game.Pages
         private int NumberOfFieldsInRow { get; set; }
         private int NumberOfRows { get; set; }
         private List<Color> ColorsList {get; set;}
+        private TreeStructure GameTree { get; set; }
+        private bool IsFirstMove { get; set; }
         public GameplayPage(MainWindow window, StartPage startPage, int gameLenght, int seriesLength, int colorsCount, int colorListCount)
         {
             this.Window = window;
@@ -41,6 +43,8 @@ namespace KTL_game.Pages
             this.ColorListCount = colorListCount;
             this.NumberOfFieldsInRow = 15;
             this.ButtonColorIndexList = new List<int>();
+            this.GameTree = new TreeStructure(colorListCount, colorsCount,GameLength,SeriesLength,3);
+            this.IsFirstMove = true;
             InitializeComponent();
             InitLabelsValues();
             InitGrid();
@@ -127,7 +131,7 @@ namespace KTL_game.Pages
                 while (true)
                 {
                     bool foundRand = true;
-                    int tmpNum = rand.Next(ColorsCount - 1);
+                    int tmpNum = rand.Next(ColorsCount);
                     for(int j=0;j<tmpColorList.Count;j++)
                     {
                         if(ColorsList[tmpNum] == tmpColorList[j])
@@ -145,22 +149,33 @@ namespace KTL_game.Pages
             }
             var button = (Button)sender;
             int buttonIndex = int.Parse(button.Content.ToString());
-            var colorMoveScoreList = new List<int>();
-            
-            foreach(var color in tmpColorIndexList)
-            { 
-                colorMoveScoreList.Add(GetMoveScore(color, buttonIndex, new List<int>(ButtonColorIndexList)));
-            }
-
-            int min = 1000000;
             int chooseColorIndex = -1;
-            for(int i=0;i<colorMoveScoreList.Count;i++)
+            if (IsFirstMove)
             {
-                if(colorMoveScoreList[i]<min)
+                chooseColorIndex = rand.Next(tmpColorIndexList.Count - 1);
+                chooseColorIndex = tmpColorIndexList[chooseColorIndex];
+                IsFirstMove = false;
+                GameTree.FirstRandomInGameplay(buttonIndex - 1, chooseColorIndex);
+            }
+            else
+            {
+                chooseColorIndex = GameTree.GetMoveColor(tmpColorIndexList, buttonIndex - 1);
+                /*var colorMoveScoreList = new List<int>();
+                foreach (var color in tmpColorIndexList)
                 {
-                    min = colorMoveScoreList[i];
-                    chooseColorIndex = i;
+                    colorMoveScoreList.Add(GetMoveScore(color, buttonIndex, new List<int>(ButtonColorIndexList)));
                 }
+
+                int min = 1000000;
+                for (int i = 0; i < colorMoveScoreList.Count; i++)
+                {
+                    if (colorMoveScoreList[i] < min)
+                    {
+                        min = colorMoveScoreList[i];
+                        chooseColorIndex = i;
+                    }
+                }
+                chooseColorIndex = tmpColorIndexList[chooseColorIndex];*/
             }
             //DO POPRAWY
             //Losuję --- Wybieram kolor z listy kolorów
@@ -175,18 +190,18 @@ namespace KTL_game.Pages
                 }
             }*/
 
-            ButtonColorIndexList[buttonIndex - 1] = 0;
-            int index = 0;
-            button.Background = new SolidColorBrush(ColorsList[0]);
-            //button.Background = new SolidColorBrush(tmpColorList[colorIndex]);
-            button.IsEnabled = false;
-
-            //ButtonColorIndexList[buttonIndex - 1] = tmpColorIndexList[chooseColorIndex];
-            //int index = tmpColorIndexList[chooseColorIndex];
-            //button.Background = new SolidColorBrush(ColorsList[tmpColorIndexList[chooseColorIndex]]);
+            //ButtonColorIndexList[buttonIndex - 1] = 0;
+            //int index = 0;
+            //button.Background = new SolidColorBrush(ColorsList[0]);
             ////button.Background = new SolidColorBrush(tmpColorList[colorIndex]);
             //button.IsEnabled = false;
-            ////sprawdzam czy powstał ciąg
+
+            ButtonColorIndexList[buttonIndex - 1] = chooseColorIndex;
+            int index = chooseColorIndex;
+            button.Background = new SolidColorBrush(ColorsList[chooseColorIndex]);
+            //button.Background = new SolidColorBrush(tmpColorList[colorIndex]);
+            button.IsEnabled = false;
+            //sprawdzam czy powstał ciąg
             //int currentSeriesLength = CheckForSeries(tmpColorIndexList[chooseColorIndex]);
 
 
